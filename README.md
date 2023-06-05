@@ -2,6 +2,8 @@
 
 Khối điều khiển **Optimization Parallelism Efficiency Controller** với giao thức **Distributed DNN Controller Protocol**
 
+![image](https://github.com/future-internet-lab/OPE_controller/assets/95759699/bdde271b-2951-4f29-845b-0279f8b2350d)
+
 ## Cấu hình
 
 Trong file `yml` trên mỗi loại thiết bị:
