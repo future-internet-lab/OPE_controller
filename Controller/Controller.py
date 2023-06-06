@@ -2,8 +2,10 @@ import socket
 import yaml
 import time
 import random
+import os
 from _thread import *
 from SenderHelper import *
+from Connection import Connect
 from Processor import Processor
 
 with open("config.yml", "r") as stream:
@@ -13,35 +15,12 @@ with open("config.yml", "r") as stream:
         print(exc)
         exit()
 
+PID = os.getpid()
+print(PID)
+
 host = config['controller']['address']['host']
 port = config['controller']['address']['port']
 num_client = config['client']['num']
-
-proc = Processor(num_client)
-
-def Connect(connection):
-    global proc
-    connection.send(str.encode('Server is working'))
-    while True:
-        data = connection.recv(65536)
-        if not data:
-            break
-        print(data)     # test
-        if (len(data) >= 8):
-            options = data[5]
-            if options & 0b10000000:
-                if options & 0b01000000:    # Đọc bit error
-                    print("error!")
-                elif options & 0b00100000:  # Đọc bit warning
-                    print("warning!")
-                else:
-                    # ok, it's good. Logic here
-                    if data[0] == 0:
-                        proc.ProcessInit(data)
-                    if data[0] == 2:
-                        proc.ProcessSendingCode(data)
-        
-    connection.close()
 
 def StartController(session_id):
     # Init
@@ -49,8 +28,8 @@ def StartController(session_id):
 
 
 if __name__ == "__main__":
+    proc = Processor(PID, num_client)
     ServerSideSocket = socket.socket()
-
     ThreadCount = 0
     try:
         ServerSideSocket.bind((host, port))
@@ -65,7 +44,7 @@ if __name__ == "__main__":
     while True:
         client, address = ServerSideSocket.accept()
         print('Connected to: ' + address[0] + ':' + str(address[1]))
-        start_new_thread(Connect, (client, ))
+        start_new_thread(Connect, (client, proc ))
         proc.Clients.append(client)
         ThreadCount += 1
         if ThreadCount >= num_client:

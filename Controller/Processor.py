@@ -1,7 +1,9 @@
 from SenderHelper import *
+import os
 
 class Processor:
-    def __init__(self, num_client):
+    def __init__(self, pid, num_client):
+        self.pid = pid
         self.count = 0
         self.num_client = num_client
         self.Clients = []
@@ -23,7 +25,11 @@ class Processor:
     """
     def ProcessInit(self, mess):
         userId = mess[4]
-        self._check[userId] = True
+        try:
+            self._check[userId] = True
+        except:
+            print("Error while reading message")
+            return
         if self.IsContinue():
             # Send Code (2), chưa có payload
             SendToAll(self.Clients, b'\x02', b'\x00', mess[2:4], b'\x00', b'')
@@ -33,6 +39,29 @@ class Processor:
     Xử lý khi nhận gói tin Send Code ACK
     """
     def ProcessSendingCode(self, mess):
-        return None
+        # Tạm thời dừng flow
+        userId = mess[4]
+        try:
+            self._check[userId] = True
+        except:
+            print("Error while reading message")
+            return
+        if self.IsContinue():
+            # Terminate (5)
+            SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
+            self.ResetCheck()
 
-
+    """
+    Xử lý khi nhận gói tin Terminate ACK
+    """
+    def ProcessTerminate(self, mess):
+        # Tạm thời dừng flow
+        userId = mess[4]
+        try:
+            self._check[userId] = True
+        except:
+            print("Error while reading message")
+            return
+        if self.IsContinue():
+            print("Stop controller")
+            os.system("sudo kill "+str(self.pid))
