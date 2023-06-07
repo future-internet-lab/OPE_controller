@@ -29,10 +29,10 @@ def StartController(session_id):
 
 if __name__ == "__main__":
     proc = Processor(PID, num_client)
-    ServerSideSocket = socket.socket()
-    ThreadCount = 0
+    ServerSideSocket = socket.socket() # create socket
+    ThreadCount = 0                    # thread count
     try:
-        ServerSideSocket.bind((host, port))
+        ServerSideSocket.bind((host, port)) # connect
     except socket.error as e:
         print(str(e))
         exit()

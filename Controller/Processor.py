@@ -20,6 +20,9 @@ class Processor:
         for i in self._check:
             i = False
 
+    #def sendFile(self):
+        #for 
+
     """
     Xử lý khi nhận gói tin Initiation ACK
     """
@@ -31,10 +34,12 @@ class Processor:
             print("Error while reading message")
             return
         if self.IsContinue():
-            # TODO: Gen các code ở đây
-
-            # TODO: Send Code (2), chưa có payload
-            SendToAll(self.Clients, b'\x02', b'\x00', mess[2:4], b'\x00', b'')
+            # gui file wo day
+            with open ("code_generator/Helloworld.py", "r") as f:
+                payload = f.read().encode("utf-8")
+            # Send Code (2) with payload
+            print(payload)
+            SendToAll(self.Clients, b'\x02', b'\x00', mess[2:4], b'\x00', payload)
             self.ResetCheck()
 
     """
