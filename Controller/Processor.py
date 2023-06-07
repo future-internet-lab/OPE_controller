@@ -31,7 +31,9 @@ class Processor:
             print("Error while reading message")
             return
         if self.IsContinue():
-            # Send Code (2), chưa có payload
+            # TODO: Gen các code ở đây
+
+            # TODO: Send Code (2), chưa có payload
             SendToAll(self.Clients, b'\x02', b'\x00', mess[2:4], b'\x00', b'')
             self.ResetCheck()
 
@@ -39,7 +41,6 @@ class Processor:
     Xử lý khi nhận gói tin Send Code ACK
     """
     def ProcessSendingCode(self, mess):
-        # Tạm thời dừng flow
         userId = mess[4]
         try:
             self._check[userId] = True
@@ -47,7 +48,7 @@ class Processor:
             print("Error while reading message")
             return
         if self.IsContinue():
-            # Terminate (5)
+            # TODO: thành luồng chạy code, đang để Terminate (5)
             SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
             self.ResetCheck()
 
