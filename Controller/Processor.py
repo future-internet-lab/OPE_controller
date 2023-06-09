@@ -1,6 +1,7 @@
 from SenderHelper import *
 import os
 
+
 class Processor:
     def __init__(self, pid: int, num_client: int):
         self.pid = pid
@@ -8,11 +9,11 @@ class Processor:
         self.num_client = num_client
         self.Clients = []
 
-        self._check = [False]*num_client
+        self._check = [False] * num_client
 
-    def IsContinue(self):
+    def IsContinue(self) -> bool:
         for i in self._check:
-            if i == False:
+            if not i:
                 return False
         return True
 
@@ -20,13 +21,15 @@ class Processor:
         for i in self._check:
             i = False
 
-    #def sendFile(self):
-        #for 
+    # def sendFile(self):
+    # for
 
-    """
-    Xử lý khi nhận gói tin Initiation ACK
-    """
     def ProcessInit(self, mess: bytes):
+        """
+        Xử lý khi nhận gói tin Initiation ACK
+        :param mess: Gói tin nhận được
+        :return: None
+        """
         userId = mess[4]
         try:
             self._check[userId] = True
@@ -35,17 +38,19 @@ class Processor:
             return
         if self.IsContinue():
             # gui file wo day
-            with open ("code_generator/Helloworld.py", "r") as f:
+            with open("code_generator/Helloworld.py", "r") as f:
                 payload = f.read().encode("utf-8")
             # Send Code (2) with payload
             print(payload)
             SendToAll(self.Clients, b'\x02', b'\x00', mess[2:4], b'\x00', payload)
             self.ResetCheck()
 
-    """
-    Xử lý khi nhận gói tin Send Code ACK
-    """
     def ProcessSendingCode(self, mess: bytes):
+        """
+        Xử lý khi nhận gói tin Send Code ACK
+        :param mess: Gói tin nhận được
+        :return: None
+        """
         userId = mess[4]
         try:
             self._check[userId] = True
@@ -57,10 +62,12 @@ class Processor:
             SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
             self.ResetCheck()
 
-    """
-    Xử lý khi nhận gói tin Terminate ACK
-    """
     def ProcessTerminate(self, mess: bytes):
+        """
+         Xử lý khi nhận gói tin Terminate ACK
+        :param mess: Gói tin nhận được
+        :return: None
+        """
         # Tạm thời dừng flow
         userId = mess[4]
         try:
@@ -70,4 +77,4 @@ class Processor:
             return
         if self.IsContinue():
             print("Stop controller")
-            os.system("sudo kill "+str(self.pid))
+            os.system("sudo kill " + str(self.pid))

@@ -1,8 +1,5 @@
-import socket
 import yaml
-import os
 from _thread import *
-from SenderHelper import *
 from MessageHandler import *
 
 with open("config.yml", "r") as stream:

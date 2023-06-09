@@ -22,6 +22,7 @@ host = config['controller']['address']['host']
 port = config['controller']['address']['port']
 num_client = config['client']['num']
 
+
 def StartController(session_id: bytes):
     # Init
     SendToAll(proc.Clients, b'\x00', b'\x00', session_id, b'\x00', b'')
@@ -29,22 +30,22 @@ def StartController(session_id: bytes):
 
 if __name__ == "__main__":
     proc = Processor(PID, num_client)
-    ServerSideSocket = socket.socket() # create socket
-    ThreadCount = 0                    # thread count
+    ServerSideSocket = socket.socket()  # create socket
+    ThreadCount = 0  # thread count
     try:
-        ServerSideSocket.bind((host, port)) # connect
+        ServerSideSocket.bind((host, port))  # connect
     except socket.error as e:
         print(str(e))
         exit()
     print('Socket is listening..')
     ServerSideSocket.listen(num_client)
 
-    session_id = random.randint(0,255).to_bytes(2, 'big')
+    session_id = random.randint(0, 255).to_bytes(2, 'big')
 
     while True:
         client, address = ServerSideSocket.accept()
         print('Connected to: ' + address[0] + ':' + str(address[1]))
-        start_new_thread(Connect, (client, proc ))
+        start_new_thread(Connect, (client, proc))
         proc.Clients.append(client)
         ThreadCount += 1
         if ThreadCount >= num_client:
@@ -52,4 +53,4 @@ if __name__ == "__main__":
             # Start the controller
             StartController(session_id)
 
-    ServerSideSocket.close()
+    # ServerSideSocket.close()
