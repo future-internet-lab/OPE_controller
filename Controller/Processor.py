@@ -18,8 +18,8 @@ class Processor:
         return True
 
     def ResetCheck(self):
-        for i in self._check:
-            i = False
+        for _ in self._check:
+            _ = False
 
     # def sendFile(self):
     # for
