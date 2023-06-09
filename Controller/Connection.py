@@ -1,4 +1,7 @@
-def Connect(connection, proc):
+import socket
+from Processor import Processor
+
+def Connect(connection: socket.socket, proc: Processor):
     connection.send(str.encode('Server is working'))
     while True:
         data = connection.recv(65536)

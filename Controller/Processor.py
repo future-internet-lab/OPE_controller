@@ -2,7 +2,7 @@ from SenderHelper import *
 import os
 
 class Processor:
-    def __init__(self, pid, num_client):
+    def __init__(self, pid: int, num_client: int):
         self.pid = pid
         self.count = 0
         self.num_client = num_client
@@ -26,7 +26,7 @@ class Processor:
     """
     Xử lý khi nhận gói tin Initiation ACK
     """
-    def ProcessInit(self, mess):
+    def ProcessInit(self, mess: bytes):
         userId = mess[4]
         try:
             self._check[userId] = True
@@ -45,7 +45,7 @@ class Processor:
     """
     Xử lý khi nhận gói tin Send Code ACK
     """
-    def ProcessSendingCode(self, mess):
+    def ProcessSendingCode(self, mess: bytes):
         userId = mess[4]
         try:
             self._check[userId] = True
@@ -60,7 +60,7 @@ class Processor:
     """
     Xử lý khi nhận gói tin Terminate ACK
     """
-    def ProcessTerminate(self, mess):
+    def ProcessTerminate(self, mess: bytes):
         # Tạm thời dừng flow
         userId = mess[4]
         try:

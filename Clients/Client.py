@@ -20,8 +20,6 @@ print(PID)
 
 if __name__ == "__main__":
     Client = socket.socket()
-    client_id = None
-    session_id = None
     print('Waiting for connection response')
     try:
         Client.connect((host, port))
@@ -29,7 +27,7 @@ if __name__ == "__main__":
         print(str(e))
         exit()
         
-    handler = MessageHandler(Client, client_id, session_id, PID)
+    handler = MessageHandler(Client, PID)
 
     data = Client.recv(1024)
     Client.send(b'Hello')

@@ -1,14 +1,15 @@
+import socket
 import os
 from SenderHelper import *
 
 class MessageHandler:
-    def __init__(self, client, client_id, session_id, pid):
+    def __init__(self, client: socket.socket, pid: int):
         self.client = client
-        self.client_id = client_id
-        self.session_id = session_id
+        self.client_id = None
+        self.session_id = None
         self.pid = pid
 
-    def process(self, mess):
+    def process(self, mess: bytes):
         if (len(mess) >= 8):
             options = mess[5]
             if not (options & 0b10000000):
@@ -21,8 +22,7 @@ class MessageHandler:
                     if mess[0] == 0:    # Initiation
                         self.client_id = mess[4]
                         self.session_id = mess[2:4]
-                        self.client.send(DDCPformat(b'\x00',b'\x00',self.session_id,self.client_id,b'\x80',b'')) # kí hiệu ascii
-                        #self.client.send('xin chaoo Luan')
+                        self.client.send(DDCPformat(b'\x00',b'\x00',self.session_id,self.client_id,b'\x80',b''))
                     if mess[0] == 1:    # Run service
                         # TODO: next flow
                         print('None')

@@ -22,7 +22,7 @@ host = config['controller']['address']['host']
 port = config['controller']['address']['port']
 num_client = config['client']['num']
 
-def StartController(session_id):
+def StartController(session_id: bytes):
     # Init
     SendToAll(proc.Clients, b'\x00', b'\x00', session_id, b'\x00', b'')
 
