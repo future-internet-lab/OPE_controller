@@ -27,7 +27,7 @@ if __name__ == "__main__":
     handler = MessageHandler(Client, PID)
 
     data = Client.recv(1024)
-    Client.send(b'Hello')
+    Client.send(b'Client send: Hello')
     while True:
         data = Client.recv(65536)
         print(data)

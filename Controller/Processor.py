@@ -45,6 +45,10 @@ class Processor:
             SendToAll(self.Clients, b'\x02', b'\x00', mess[2:4], b'\x00', payload)
             self.ResetCheck()
 
+    def ProcessRunService(self, mess:bytes):
+        print('Client is running code ...')
+        SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
+
     def ProcessSendingCode(self, mess: bytes):
         """
         Xử lý khi nhận gói tin Send Code ACK
@@ -59,7 +63,8 @@ class Processor:
             return
         if self.IsContinue():
             # TODO: thành luồng chạy code, đang để Terminate (5)
-            SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
+            print(mess)
+            SendToAll(self.Clients, b'\x01', b'\x00', mess[2:4], b'\x00', b'')
             self.ResetCheck()
 
     def ProcessTerminate(self, mess: bytes):

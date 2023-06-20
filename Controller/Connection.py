@@ -24,10 +24,16 @@ def Connect(connection: socket.socket, proc: Processor):
                 else:
                     # ok, it's good. Logic here
                     if data[0] == 0:
-                        proc.ProcessInit(data)
+                        print('Server receive data[0]= ', data[0])
+                        proc.ProcessInit(data) #send 2
+                    if data[0] == 1:
+                        print('Server receive data[0]= ', data[0])
+                        proc.ProcessRunService(data) # send 5
                     if data[0] == 2:
-                        proc.ProcessSendingCode(data)
+                        print('Server receive data[0]= ', data[0])
+                        proc.ProcessSendingCode(data)  #send 1
                     if data[0] == 5:
-                        proc.ProcessTerminate(data)
+                        print('Server receive data[0]= ', data[0])
+                        proc.ProcessTerminate(data) # stop
 
     connection.close()
