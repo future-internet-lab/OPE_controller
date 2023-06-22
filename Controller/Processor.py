@@ -1,6 +1,8 @@
 from SenderHelper import *
 import os
+import time
 
+Duration_time = 1000
 
 class Processor:
     def __init__(self, pid: int, num_client: int):
@@ -46,8 +48,14 @@ class Processor:
             self.ResetCheck()
 
     def ProcessRunService(self, mess:bytes):
-        print('Client is running code ...')
-        SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
+        userId = mess[4]
+        try:
+            self._check[userId] = True
+        except:
+            print("Error while reading message")
+        if self.IsContinue():
+            print('Client is running code ...')
+            SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
 
     def ProcessSendingCode(self, mess: bytes):
         """
@@ -66,6 +74,9 @@ class Processor:
             print(mess)
             SendToAll(self.Clients, b'\x01', b'\x00', mess[2:4], b'\x00', b'')
             self.ResetCheck()
+
+    def ProcessRequestLOG(self, mess:bytes):
+        print('Request LOG')
 
     def ProcessTerminate(self, mess: bytes):
         """

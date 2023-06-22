@@ -4,4 +4,4 @@ controller:
     port: 823
   duration: 60
 client:
-  num: 1
+  num: 2

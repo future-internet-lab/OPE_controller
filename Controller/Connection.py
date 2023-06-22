@@ -32,6 +32,8 @@ def Connect(connection: socket.socket, proc: Processor):
                     if data[0] == 2:
                         print('Server receive data[0]= ', data[0])
                         proc.ProcessSendingCode(data)  #send 1
+                    if data[0] == 3:
+                        print('Request file from Client . . .')
                     if data[0] == 5:
                         print('Server receive data[0]= ', data[0])
                         proc.ProcessTerminate(data) # stop
