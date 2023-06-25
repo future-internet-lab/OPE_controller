@@ -2,7 +2,7 @@ from SenderHelper import *
 import os
 import time
 
-Duration_time = 1000
+Duration_time = 30
 
 class Processor:
     def __init__(self, pid: int, num_client: int):
@@ -55,7 +55,8 @@ class Processor:
             print("Error while reading message")
         if self.IsContinue():
             print('Client is running code ...')
-            SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
+            time.sleep(Duration_time)
+            SendToAll(self.Clients, b'\x03', b'\x00', mess[2:4], b'\x00', b'')
 
     def ProcessSendingCode(self, mess: bytes):
         """
@@ -76,7 +77,13 @@ class Processor:
             self.ResetCheck()
 
     def ProcessRequestLOG(self, mess:bytes):
-        print('Request LOG')
+        print('Client receive mess[0]= ', mess[0])
+        payload_len = int(mess[6]) * 256 + int(mess[7])
+        payload = mess[8:(8 + payload_len)]
+        f = open("log_receiver/log1.txt", "w")
+        f.write(payload.decode("utf-8"))
+        f.close()
+        SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
 
     def ProcessTerminate(self, mess: bytes):
         """

@@ -33,6 +33,7 @@ def Connect(connection: socket.socket, proc: Processor):
                         print('Server receive data[0]= ', data[0])
                         proc.ProcessSendingCode(data)  #send 1
                     if data[0] == 3:
+                        proc.ProcessRequestLOG(data)
                         print('Request file from Client . . .')
                     if data[0] == 5:
                         print('Server receive data[0]= ', data[0])
