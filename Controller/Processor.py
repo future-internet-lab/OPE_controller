@@ -77,12 +77,24 @@ class Processor:
             self.ResetCheck()
 
     def ProcessRequestLOG(self, mess:bytes):
-        print('Client receive mess[0]= ', mess[0])
-        payload_len = int(mess[6]) * 256 + int(mess[7])
-        payload = mess[8:(8 + payload_len)]
-        f = open("log_receiver/log1.txt", "w")
-        f.write(payload.decode("utf-8"))
-        f.close()
+        userId = mess[4]
+        try:
+            self._check[userId] = True
+        except:
+            print("Error while reading message")
+            return
+        if self.IsContinue():
+            # TODO: thành luồng chạy code, đang để Terminate (5)
+            print('Client receive mess[0]= ', mess[0])
+            payload_len = int(mess[6]) * 256 + int(mess[7])
+            payload = mess[8:(8 + payload_len)]
+            f = open("log_receiver/log1.txt", "w")
+            f.write(payload.decode("utf-8"))
+            f.close()
+            SendToAll(self.Clients, b'\x04', b'\x00', mess[2:4], b'\x00', b'')
+
+    def ProcessKillService(self, mess:bytes):
+        print("Kill all service . . .")
         SendToAll(self.Clients, b'\x05', b'\x00', mess[2:4], b'\x00', b'')
 
     def ProcessTerminate(self, mess: bytes):

@@ -78,6 +78,7 @@ class MessageHandler:
                         f.close()
                         self.client.send(DDCPformat(b'\x02', b'\x00', self.session_id, self.client_id, b'\x80', b''))
                     if mess[0] ==3:  # Send file .log
+                        print('Client receive mess[0]= ', mess[0])
                         with open("Log_folder/new_file.txt", "r") as f:
                             log_file = f.read().encode("utf-8")
                             # Send Code (2) with payload
@@ -86,7 +87,7 @@ class MessageHandler:
                         self.client.send(DDCPformat(b'\x03', b'\x00', self.session_id, self.client_id, b'\x80', b''))
                     if mess[0] ==4:  # Kill service
                         print('Kill . . .')
-                        self.client.send(DDCPformat(b'\x02', b'\x00', self.session_id, self.client_id, b'\x80', b''))
+                        self.client.send(DDCPformat(b'\x04', b'\x00', self.session_id, self.client_id, b'\x80', b''))
                     if mess[0] == 5:  # Terminate
                         # TODO: Nhận code ở đây
                         print('Client receive mess[0]= ', mess[0])

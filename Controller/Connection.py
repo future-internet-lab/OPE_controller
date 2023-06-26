@@ -35,6 +35,9 @@ def Connect(connection: socket.socket, proc: Processor):
                     if data[0] == 3:
                         proc.ProcessRequestLOG(data)
                         print('Request file from Client . . .')
+                    if data[0] == 4:
+                        print('Server receive data[0]= ', data[0])
+                        proc.ProcessKillService(data)
                     if data[0] == 5:
                         print('Server receive data[0]= ', data[0])
                         proc.ProcessTerminate(data) # stop
